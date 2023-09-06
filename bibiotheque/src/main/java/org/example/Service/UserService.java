@@ -10,8 +10,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean authenticate(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        return user != null && user.getPassword().equals(password);
+    public User authenticate(User userC) {
+        User user = userRepository.findByUsername(userC);
+        if(user.getPassword().equals(userC.getPassword()) && user!=null){
+            return user;
+        }else{
+            return null;
+        }
     }
 }

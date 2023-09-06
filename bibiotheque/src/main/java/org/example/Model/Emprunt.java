@@ -20,6 +20,19 @@ public class Emprunt {
         this.emprunteur = emprunteur;
     }
 
+    public Emprunt() {
+    }
+
+    @Override
+    public String toString() {
+        return "Emprunt{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", returne=" + returne +
+                ", emprunteur=" + emprunteur +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
@@ -60,8 +73,8 @@ public class Emprunt {
         this.livreList = livreList;
     }
 
-    public Emprunteur getEmprunteur() {
-        return emprunteur;
+    public Long getEmprunteur() {
+        return emprunteur.getId();
     }
 
     public void setEmprunteur(Emprunteur emprunteur) {
