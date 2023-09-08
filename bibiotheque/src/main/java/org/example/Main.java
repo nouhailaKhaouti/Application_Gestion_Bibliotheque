@@ -14,7 +14,7 @@ public class Main {
         EmpruntController empruntController=new EmpruntController();
         Boolean auth=authentificationController.Authenification();
         if (auth) {
-            empruntController.save(7);
+            empruntController.save();
             Status status=new Status("disponible");
             System.out.print(status.getLabel());
         } else {

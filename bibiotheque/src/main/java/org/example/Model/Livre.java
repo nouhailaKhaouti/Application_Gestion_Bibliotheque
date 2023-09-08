@@ -1,6 +1,7 @@
 package org.example.Model;
 
-import java.util.Collection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Livre {
@@ -59,5 +60,14 @@ public class Livre {
 
     public void setNumeroInventair(String numeroInventair) {
         this.numeroInventair = numeroInventair;
+    }
+
+    public Livre mapData(ResultSet resultSet) throws SQLException {
+
+        Collection collection=new Collection();
+        this.id = resultSet.getLong("id");
+        this.numeroInventair = resultSet.getString("numeroInventair");
+        this.collection=collection.mapData(resultSet);
+        return this;
     }
 }

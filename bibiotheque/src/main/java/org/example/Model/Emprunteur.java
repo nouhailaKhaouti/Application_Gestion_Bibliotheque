@@ -1,5 +1,7 @@
 package org.example.Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Emprunteur {
@@ -66,5 +68,16 @@ public class Emprunteur {
 
     public void setEmpruntList(List<Emprunt> empruntList) {
         this.empruntList = empruntList;
+    }
+
+    public Emprunteur mapData(ResultSet resultSet) throws SQLException {
+
+        this.id = resultSet.getLong("id");
+        this.membreShip = resultSet.getString("membreShip");
+        this.fullName = resultSet.getString("fullName");
+        this.email = resultSet.getString("email");
+        this.phone = resultSet.getString("phone");
+
+        return this;
     }
 }

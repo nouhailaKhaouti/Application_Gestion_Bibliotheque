@@ -1,5 +1,7 @@
 package org.example.Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Collection {
@@ -68,4 +70,18 @@ public class Collection {
     public String getAuteur() {
         return auteur;
     }
+
+
+
+    public Collection mapData(ResultSet resultSet) throws SQLException {
+
+        this.id = resultSet.getLong("id");
+        this.auteur = resultSet.getString("auteur");
+        this.isbn = resultSet.getString("isbn");
+        this.title = resultSet.getString("title");
+        this.totale = resultSet.getInt("totale");
+
+        return this;
+    }
+
 }

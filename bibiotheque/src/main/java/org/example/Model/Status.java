@@ -1,5 +1,7 @@
 package org.example.Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Status {
@@ -36,5 +38,13 @@ public class Status {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Status mapData(ResultSet resultSet) throws SQLException {
+
+        this.id = resultSet.getLong("id");
+        this.label = resultSet.getString("label");
+
+        return this;
     }
 }

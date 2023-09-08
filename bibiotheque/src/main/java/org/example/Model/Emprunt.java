@@ -1,5 +1,7 @@
 package org.example.Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -80,4 +82,14 @@ public class Emprunt {
     public void setEmprunteur(Emprunteur emprunteur) {
         this.emprunteur = emprunteur;
     }
+
+    public Emprunt mapData(ResultSet resultSet) throws SQLException {
+
+        this.id = resultSet.getLong("id");
+        this.startDate = resultSet.getDate("startDate");
+        this.endDate = resultSet.getDate("endDate");
+        this.returne = resultSet.getBoolean("returne");
+        return this;
+    }
+
 }
