@@ -55,6 +55,7 @@ public class StatusRepository {
         try(PreparedStatement preparedStatement=connection.prepareStatement(SelectStatusQuery); ResultSet resultSet =preparedStatement.executeQuery()){
             while (resultSet.next()) {
                 Status status =new Status();
+                status.setId(resultSet.getLong("id"));
                 statusA.add(status.mapData(resultSet));
             }
         }
@@ -70,6 +71,7 @@ public class StatusRepository {
             ResultSet resultSet =preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Status status =new Status();
+                status.setId(resultSet.getLong("id"));
                 status.mapData(resultSet);
                 return status;
             }

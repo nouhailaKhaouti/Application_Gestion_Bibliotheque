@@ -16,7 +16,7 @@ public class LivreRepository {
     Connection connection = db.connect();
     public boolean save(Livre livre) throws SQLException {
 
-        String insertCollectionQuery = "INSERT INTO Collection (isbn, title, auteur, totale) VALUES (?, ?, ?, ?)";
+        String insertCollectionQuery = "INSERT INTO Livre (numeroinventair) VALUES (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertCollectionQuery)) {
             preparedStatement.setString(1, livre.getNumeroInventair());
 

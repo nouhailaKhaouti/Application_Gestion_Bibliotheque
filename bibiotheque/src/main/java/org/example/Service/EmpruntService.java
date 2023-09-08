@@ -28,8 +28,8 @@ public class EmpruntService {
 
     }
 
-    public String returne()throws  SQLException{
-        if(empruntRepository.update(true)){
+    public String returne(Long id)throws  SQLException{
+        if(empruntRepository.update(true,id)){
             return "the book has been returned successfully";
         }
         return "an error accured while changing the returne";

@@ -61,6 +61,7 @@ public class CollectionRepository {
         try(PreparedStatement preparedStatement=connection.prepareStatement(SelectCollectionQuery);ResultSet resultSet =preparedStatement.executeQuery()){
             while (resultSet.next()) {
                 Collection collection =new Collection();
+                collection.setId(resultSet.getLong("id"));
                 collections.add(collection.mapData(resultSet));
             }
         }
@@ -75,6 +76,7 @@ public class CollectionRepository {
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Collection collection=new Collection();
+                collection.setId(resultSet.getLong("id"));
                 collection.mapData(resultSet);
                 return collection;
             }
@@ -90,6 +92,7 @@ public class CollectionRepository {
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Collection collection=new Collection();
+                collection.setId(resultSet.getLong("id"));
                 collection.mapData(resultSet);
                 return collection;
             }

@@ -72,7 +72,6 @@ public class Emprunteur {
 
     public Emprunteur mapData(ResultSet resultSet) throws SQLException {
 
-        this.id = resultSet.getLong("id");
         this.membreShip = resultSet.getString("membreShip");
         this.fullName = resultSet.getString("fullName");
         this.email = resultSet.getString("email");

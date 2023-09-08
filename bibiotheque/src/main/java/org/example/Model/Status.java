@@ -42,7 +42,6 @@ public class Status {
 
     public Status mapData(ResultSet resultSet) throws SQLException {
 
-        this.id = resultSet.getLong("id");
         this.label = resultSet.getString("label");
 
         return this;

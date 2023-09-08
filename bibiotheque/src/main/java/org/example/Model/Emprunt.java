@@ -75,8 +75,11 @@ public class Emprunt {
         this.livreList = livreList;
     }
 
-    public Long getEmprunteur() {
+    public Long getEmprunteurid() {
         return emprunteur.getId();
+    }
+    public Emprunteur getEmprunteur() {
+        return emprunteur;
     }
 
     public void setEmprunteur(Emprunteur emprunteur) {

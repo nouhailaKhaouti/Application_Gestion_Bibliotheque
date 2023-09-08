@@ -65,9 +65,12 @@ public class Livre {
     public Livre mapData(ResultSet resultSet) throws SQLException {
 
         Collection collection=new Collection();
-        this.id = resultSet.getLong("id");
+        Status status=new Status();
         this.numeroInventair = resultSet.getString("numeroInventair");
+        this.collection.setId(resultSet.getLong("collection_id"));
         this.collection=collection.mapData(resultSet);
+        this.status.setId(resultSet.getLong("status_id"));
+        this.status=status.mapData(resultSet);
         return this;
     }
 }

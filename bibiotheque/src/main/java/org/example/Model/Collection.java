@@ -75,7 +75,6 @@ public class Collection {
 
     public Collection mapData(ResultSet resultSet) throws SQLException {
 
-        this.id = resultSet.getLong("id");
         this.auteur = resultSet.getString("auteur");
         this.isbn = resultSet.getString("isbn");
         this.title = resultSet.getString("title");

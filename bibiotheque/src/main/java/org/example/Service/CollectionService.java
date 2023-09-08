@@ -20,7 +20,6 @@ public class CollectionService {
         }else{
             return false;
         }
-
     }
     public String update(Collection collection) throws SQLException {
         if(collectionRepository.collectionExists(collection.getIsbn())>0){
@@ -67,6 +66,5 @@ public class CollectionService {
             return null;
         }
     }
-
 
 }

@@ -61,6 +61,7 @@ public class EmprunteurRepository {
         try(PreparedStatement preparedStatement=connection.prepareStatement(SelectEmprunteurQuery); ResultSet resultSet =preparedStatement.executeQuery()){
             while (resultSet.next()) {
                 Emprunteur emprunteur =new Emprunteur();
+                emprunteur.setId(resultSet.getLong("id"));
                 emprunteurs.add(emprunteur.mapData(resultSet));
             }
         }
@@ -75,6 +76,7 @@ public class EmprunteurRepository {
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Emprunteur emprunteur=new Emprunteur();
+                emprunteur.setId(resultSet.getLong("id"));
                 emprunteur.mapData(resultSet);
                 return emprunteur;
             }
@@ -90,6 +92,7 @@ public class EmprunteurRepository {
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Emprunteur emprunteur=new Emprunteur();
+                emprunteur.setId(resultSet.getLong("id"));
                 emprunteur.mapData(resultSet);
                 return emprunteur;
             }

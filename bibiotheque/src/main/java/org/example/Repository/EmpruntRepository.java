@@ -21,7 +21,7 @@ public class EmpruntRepository {
                 empruntPreparedStatement.setDate(1, (Date) emprunt.getStartDate());
                 empruntPreparedStatement.setDate(2, (Date) emprunt.getEndDate());
                 empruntPreparedStatement.setBoolean(3, emprunt.getReturne());
-                empruntPreparedStatement.setInt(4, Math.toIntExact(emprunt.getEmprunteur()));
+                empruntPreparedStatement.setInt(4, Math.toIntExact(emprunt.getEmprunteurid()));
                 empruntPreparedStatement.executeUpdate();
                 int affectedRows = empruntPreparedStatement.executeUpdate();
 
@@ -48,10 +48,11 @@ public class EmpruntRepository {
         return false;
     }
 
-    public boolean update(Boolean returne)throws SQLException{
+    public boolean update(Boolean returne,Long id)throws SQLException{
         String UpdateEmpruntQuery="Update Emprunt Set returne=? Where id=?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(UpdateEmpruntQuery)){
             preparedStatement.setBoolean(1,returne);
+            preparedStatement.setLong(2,id);
 
             int rowDeleted=preparedStatement.executeUpdate();
             return rowDeleted > 0;
@@ -91,6 +92,7 @@ public class EmpruntRepository {
                 Livre livre=new Livre();
                 emprunt.mapData(resultSet);
                 while(resultSetL.next()){
+                    livre.setId(resultSetL.getLong("id"));
                     livres.add(livre.mapData(resultSetL));
                 }
                 emprunt.setLivreList(livres);
@@ -114,12 +116,14 @@ public class EmpruntRepository {
 
             while(resultSet.next()){
                 Emprunt emprunt=new Emprunt();
+
                 emprunts.add(emprunt.mapData(resultSet));
                 try(PreparedStatement preparedStatementL=connection.prepareStatement(findByIdLivresQuery)){
                     preparedStatement.setLong(1,resultSet.getLong("id"));
                     ResultSet resultSetL= preparedStatementL.executeQuery();
                     while(resultSetL.next()){
                         Livre livre=new Livre();
+                        livre.setId(resultSetL.getLong("id"));
                         livres.add(livre.mapData(resultSetL));
                     }
                     emprunt.setLivreList(livres);
