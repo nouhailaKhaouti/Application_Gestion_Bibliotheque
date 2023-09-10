@@ -16,10 +16,10 @@ public class LivreRepository {
     Connection connection = db.connect();
     public boolean save(Livre livre) throws SQLException {
 
-        String insertCollectionQuery = "INSERT INTO Livre (numeroinventair) VALUES (?)";
+        String insertCollectionQuery = "INSERT INTO Livre (numeroinventair,collection_id,status_id) VALUES (?,?,1)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertCollectionQuery)) {
             preparedStatement.setString(1, livre.getNumeroInventair());
-
+            preparedStatement.setLong(2, livre.getCollection().getId());
             int rowsInserted = preparedStatement.executeUpdate();
             return rowsInserted > 0;
         }
@@ -63,7 +63,7 @@ public class LivreRepository {
     public List<Livre> findAll() throws SQLException{
 
         List<Livre> livres=new ArrayList<>();
-        String SelectLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id";
+        String SelectLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id";
 
         try(PreparedStatement preparedStatement=connection.prepareStatement(SelectLivreQuery); ResultSet resultSet =preparedStatement.executeQuery()){
             while (resultSet.next()) {
@@ -73,6 +73,37 @@ public class LivreRepository {
         }
         return livres;
     }
+    public Livre findByNI(String numero)throws SQLException{
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where numeroinventair=?";
+        try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
+            preparedStatement.setString(1,numero);
+
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                Livre livre=new Livre();
+                livre.setId(resultSet.getLong("id"));
+                livre.mapData(resultSet);
+                return livre;
+            }
+        }
+        return null;
+    }
+
+    public List<Livre> findByStatus(String status)throws SQLException{
+        List<Livre> livres=new ArrayList<>();
+        String SelectLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id Where s.status=?";
+
+        try(PreparedStatement preparedStatement=connection.prepareStatement(SelectLivreQuery)){
+            preparedStatement.setString(1,status);
+            ResultSet resultSet =preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Livre livre =new Livre();
+                livres.add(livre.mapData(resultSet));
+            }
+            return livres;
+        }
+
+    }
     public Livre findById(Long id)throws SQLException{
         String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id where id=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
@@ -81,6 +112,7 @@ public class LivreRepository {
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Livre livre=new Livre();
+                livre.setId(resultSet.getLong("id"));
                 livre.mapData(resultSet);
                 return livre;
             }

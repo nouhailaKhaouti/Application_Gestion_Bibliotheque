@@ -8,16 +8,16 @@ import java.util.List;
 
 public class StatusService {
     StatusRepository statusRepository=new StatusRepository();
-    public Boolean save(Status status) throws SQLException {
-        if(statusRepository.findById(status.getId())!=null){
+    public String save(Status status) throws SQLException {
+        if(statusRepository.findByLabel(status.getLabel())==null){
             boolean res= statusRepository.save(status);
             if(res){
-                return true;
+                return "status has been added successfully";
             }else{
-                return false;
+                return "an error occured why adding this status";
             }
         }else{
-            return false;
+            return "this status already exists";
         }
 
     }
@@ -44,8 +44,8 @@ public class StatusService {
         }
     }
 
-    public Status findById(Long id)throws SQLException{
-        Status status=statusRepository.findById(id);
+    public Status findByLabel(String label)throws SQLException{
+        Status status=statusRepository.findByLabel(label);
         if(status!=null){
             return status;
         }else{
@@ -53,17 +53,17 @@ public class StatusService {
         }
     }
 
-    public Boolean delete(Long id)throws SQLException{
+    public String delete(Long id)throws SQLException{
         Status status=statusRepository.findById(id);
         if(status!=null){
             boolean res= statusRepository.delete(id);
             if(res){
-                return true;
+                return "this status has been deleted successfully";
             }else{
-                return false;
+                return "an error occurred while deleting status";
             }
         }else{
-            return null;
+            return "this status doesn't exists";
         }
     }
 }

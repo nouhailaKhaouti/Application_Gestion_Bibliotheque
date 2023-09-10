@@ -12,10 +12,6 @@ public class LivreService {
    CollectionService collectionService=new CollectionService();
    LivreRepository livreRepository=new LivreRepository();
     public String save(Livre livre)throws SQLException {
-        Collection collection=livre.getCollection();
-        if(collectionService.findByIsbn(collection.getIsbn())==null){
-            collectionService.save(collection);
-        }
         if(livreRepository.livreExists(livre.getNumeroInventair())==0) {
             if (livreRepository.save(livre)) {
                 return "livre is successfully added";
@@ -25,8 +21,8 @@ public class LivreService {
         return "livre with numero inventair: "+livre.getNumeroInventair()+" already exists";
     }
 
-    public String delete(Long id)throws SQLException{
-       Livre livre= livreRepository.findById(id);
+    public String delete(String numero)throws SQLException{
+       Livre livre= livreRepository.findByNI(numero);
        if(livre!=null){
            if(livreRepository.findByCollection(livre.getCollection().getId()).size()<1){
                boolean res=collectionService.delete(livre.getCollection().getIsbn());
@@ -36,12 +32,12 @@ public class LivreService {
                    return "error in deleting the collection";
                }
            }
-           if(livreRepository.delete(id)){
+           if(livreRepository.delete(livre.getId())){
                return "the livre has been deleted successfully";
            }
            return "an error has accured when deleting livre";
        }
-       return "there's no livre with id:"+livre.getId();
+       return "there's no livre with id:"+livre.getNumeroInventair();
     }
 
     public List<Livre> findAll()throws  SQLException{
@@ -53,5 +49,19 @@ public class LivreService {
         return livres;
     }
 
+    public Livre findByNI(String numero)throws SQLException{
+        Livre livre=livreRepository.findByNI(numero);
+        if(livre!=null){
+            return livre;
+        }
+        return null;
+    }
+
+    public String Statistiques()throws SQLException{
+        Integer dispo=livreRepository.findByStatus("diponible").size();
+        Integer perdu=livreRepository.findByStatus("perdue").size();
+        Integer emprunte=livreRepository.findByStatus("emprunte").size();
+        return "the number of books available:"+dispo+" for borrowed books  :"+emprunte+" and lastly for lost books:"+perdu;
+    }
 
 }

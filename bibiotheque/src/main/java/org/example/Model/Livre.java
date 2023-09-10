@@ -21,10 +21,9 @@ public class Livre {
         this.collection = collection;
     }
 
-    public Livre(String numeroInventair, Status status,Collection collection) {
+    public Livre(String numeroInventair,Collection collection) {
         this.collection=collection;
         this.numeroInventair = numeroInventair;
-        this.status = status;
     }
 
     public Livre() {

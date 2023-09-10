@@ -62,6 +62,22 @@ public class StatusRepository {
         return statusA;
     }
 
+    public Status findByLabel(String label) throws SQLException{
+
+        String SelectStatusQuery="Select * from Status where label=?";
+
+        try(PreparedStatement preparedStatement=connection.prepareStatement(SelectStatusQuery)){
+            preparedStatement.setString(1,label);
+            ResultSet resultSet =preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Status status =new Status();
+                status.setId(resultSet.getLong("id"));
+                status.mapData(resultSet);
+                return status;
+            }
+        }
+        return null;
+    }
     public Status findById(Long id) throws SQLException{
 
         String SelectStatusQuery="Select * from Status where id=?";

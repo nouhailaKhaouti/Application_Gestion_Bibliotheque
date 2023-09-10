@@ -4,7 +4,6 @@ import org.example.Model.Emprunt;
 import org.example.Model.Emprunteur;
 import org.example.Model.Collection;
 import org.example.Model.Livre;
-import org.example.Repository.EmpruntRepository;
 import org.example.Service.EmpruntService;
 
 import java.sql.SQLException;
@@ -21,7 +20,9 @@ public class EmpruntController {
         Scanner scanner = new Scanner(System.in);
         List<Long> data = new ArrayList<>();
         System.out.print("Enter Emprunteur id : ");
-        long emprunteur_id = Long.parseLong(scanner.nextLine());
+        long emprunteur_id = scanner.nextLong();
+        //add the emprunteur check before adding to database
+        //also if there's more time add the emprunteur can't borrow a new book if  not returned the book he already borrowed before
         System.out.print("Enter End date: ");
         String EndDate = scanner.nextLine();
         emprunteur.setId(emprunteur_id);
@@ -52,25 +53,27 @@ public class EmpruntController {
     public void findAll()throws SQLException{
         List<Emprunt> emprunts = empruntService.findAll();
 
-        // Iterate through emprunts and print information
         for (Emprunt emprunt : emprunts) {
-            System.out.println("Emprunt Date: " + emprunt.getStartDate());
-            System.out.println("Emprunt Date: " + emprunt.getEndDate());
-            System.out.println("Emprunt State: " + emprunt.getReturne());
-            System.out.println("Emprunteur name: " + emprunt.getEmprunteur().getFullName());
-            System.out.println("Emprunteur memberShip: " + emprunt.getEmprunteur().getMembreShip());
-            List<Livre> livres = emprunt.getLivreList();
-            System.out.println("{");
-            for (Livre livre : livres) {
-                Collection collection= livre.getCollection();
-                System.out.println("   Livre NumeroInventair: " + livre.getNumeroInventair());
-                System.out.println("   Livre Isbn: " + collection.getIsbn());
-                System.out.println("   Livre Title: " + collection.getTitle());
-                System.out.println("   Livre Auteur: " + collection.getAuteur());
-                System.out.print(",");
+            if(emprunt.getReturne()==false) {
+                System.out.println("Emprunt Date: " + emprunt.getStartDate());
+                System.out.println("Emprunt Date: " + emprunt.getEndDate());
+                System.out.println("Emprunt State: " + emprunt.getReturne());
+                System.out.println("Emprunteur name: " + emprunt.getEmprunteur().getFullName());
+                System.out.println("Emprunteur memberShip: " + emprunt.getEmprunteur().getMembreShip());
+                System.out.println("Emprunteur phone number: " + emprunt.getEmprunteur().getPhone());
+                System.out.println("Emprunteur Email: " + emprunt.getEmprunteur().getEmail());
+                List<Livre> livres = emprunt.getLivreList();
+                System.out.println("{");
+                for (Livre livre : livres) {
+                    Collection collection = livre.getCollection();
+                    System.out.println("   Livre NumeroInventair: " + livre.getNumeroInventair());
+                    System.out.println("   Livre Isbn: " + collection.getIsbn());
+                    System.out.println("   Livre Title: " + collection.getTitle());
+                    System.out.println("   Livre Auteur: " + collection.getAuteur());
+                    System.out.print(",");
+                }
+                System.out.println("}");
             }
-            System.out.println("}");
-
             System.out.println();
         }
         System.out.print(",");
