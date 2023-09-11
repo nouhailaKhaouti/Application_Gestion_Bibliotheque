@@ -10,7 +10,7 @@ import java.util.List;
 public class CollectionService {
     CollectionRepository collectionRepository=new CollectionRepository();
     public Boolean save(Collection collection) throws SQLException {
-        if(collectionRepository.findByIsbn(collection.getIsbn())!=null){
+        if(collectionRepository.findByIsbn(collection.getIsbn())==null){
             boolean res= collectionRepository.save(collection);
             if(res){
                 return true;
@@ -22,7 +22,9 @@ public class CollectionService {
         }
     }
     public String update(Collection collection) throws SQLException {
-        if(collectionRepository.collectionExists(collection.getIsbn())>0){
+        Collection collectionN=collectionRepository.findByIsbn(collection.getIsbn());
+        if(collectionN!=null){
+            collection.setId(collectionN.getId());
             boolean res= collectionRepository.update(collection);
             if(res){
                 return "collection has been updated successfully";

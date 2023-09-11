@@ -2,6 +2,7 @@ package org.example.Repository;
 
 import org.example.Config.DatabaseConnection;
 import org.example.Model.Emprunt;
+import org.example.Model.Emprunteur;
 import org.example.Model.Livre;
 
 import java.sql.*;
@@ -12,19 +13,19 @@ public class EmpruntRepository {
 
     DatabaseConnection db=new DatabaseConnection();
     Connection connection = db.connect();
-    public Boolean saveEmprunt(Emprunt emprunt, List<Long> ids) {
+    public boolean saveEmprunt(Emprunt emprunt, List<Long> ids) {
             String sql = "INSERT INTO Emprunt (startDate, endDate, returne, emprunteur_id) VALUES (?, ?, ?, ?)";
             String insertLivreEmpruntSql = "INSERT INTO LivreEmprunt (livre_id, emprunt_id) VALUES (?, ?)";
-
+             Date Start=new Date(emprunt.getStartDate().getTime());
+             Date End=new Date(emprunt.getEndDate().getTime());
             try (PreparedStatement empruntPreparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                  PreparedStatement livreEmpruntPreparedStatement = connection.prepareStatement(insertLivreEmpruntSql)) {
-                empruntPreparedStatement.setDate(1, (Date) emprunt.getStartDate());
-                empruntPreparedStatement.setDate(2, (Date) emprunt.getEndDate());
+                empruntPreparedStatement.setDate(1, Start);
+                empruntPreparedStatement.setDate(2, End);
                 empruntPreparedStatement.setBoolean(3, emprunt.getReturne());
-                empruntPreparedStatement.setInt(4, Math.toIntExact(emprunt.getEmprunteurid()));
+                empruntPreparedStatement.setLong(4, emprunt.getEmprunteurid());
                 empruntPreparedStatement.executeUpdate();
                 int affectedRows = empruntPreparedStatement.executeUpdate();
-
                 if (affectedRows == 0) {
                     return false;
                 }
@@ -74,13 +75,8 @@ public class EmpruntRepository {
 
     public Emprunt findById(Long id)throws SQLException{
         List<Livre> livres=new ArrayList<>();
-        String findByIdLivresQuery="SELECT l.* , C.*\n" +
-                "FROM emprunt e\n" +
-                "JOIN livreEmprunt el ON e.id = el.emprunt_id\n" +
-                "JOIN livre l ON el.livre_id = l.id\n" +
-                "JOIN Collection C On l.collection_id=C.id \n"+
-                "WHERE e.id =?";
-        String findByIdEmpruntQuery="Select * From Emprunt Where id=?";
+        String findByIdEmpruntQuery="Select em.*,E.fullname,E.membreship,E.email,E.phone  From Emprunt em join emprunteur E ON em.emprunteur_id=E.id where em.id=? ";
+        String findByIdLivresQuery="SELECT L.*,C.*,S.*,LE.* FROM LivreEmprunt LE  JOIN Livre L ON LE.livre_id = L.id  JOIN Collection C ON L.collection_id = C.id  JOIN Status S ON L.status_id = S.id where LE.emprunt_id=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(findByIdEmpruntQuery);PreparedStatement preparedStatementL=connection.prepareStatement(findByIdLivresQuery)){
             preparedStatement.setLong(1,id);
             preparedStatementL.setLong(1,id);
@@ -91,11 +87,18 @@ public class EmpruntRepository {
                 Emprunt emprunt=new Emprunt();
                 Livre livre=new Livre();
                 emprunt.mapData(resultSet);
+                Emprunteur emprunteur = new Emprunteur();
+                emprunteur.setId(resultSet.getLong("emprunteur_id"));
+                emprunteur.mapData(resultSet);
+                emprunt.setEmprunteur(emprunteur);
                 while(resultSetL.next()){
-                    livre.setId(resultSetL.getLong("id"));
+                    livre.setId(resultSetL.getLong("livre_id"));
                     livres.add(livre.mapData(resultSetL));
                 }
                 emprunt.setLivreList(livres);
+
+
+
                 return emprunt;
             }
         }
@@ -105,30 +108,27 @@ public class EmpruntRepository {
     public List<Emprunt> findByAll()throws SQLException{
         List<Emprunt> emprunts=new ArrayList<>();
         List<Livre> livres=new ArrayList<>();
-        String findByAllEmpruntQuery="Select * From Emprunt ";
-        String findByIdLivresQuery="SELECT l.* , C.*\n" +
-                "FROM emprunt e\n" +
-                "JOIN livreEmprunt el ON e.id = el.emprunt_id\n" +
-                "JOIN livre l ON el.livre_id = l.id\n" +
-                "JOIN Collection C On l.collection_id=C.id \n"+
-                "WHERE e.id =?";
+        String findByAllEmpruntQuery="Select em.*,E.fullname,E.membreship,E.email,E.phone  From Emprunt em join emprunteur E ON em.emprunteur_id=E.id ";
+        String findByIdLivresQuery="SELECT L.*,C.*,S.*,LE.* FROM LivreEmprunt LE  JOIN Livre L ON LE.livre_id = L.id  JOIN Collection C ON L.collection_id = C.id  JOIN Status S ON L.status_id = S.id where LE.emprunt_id=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(findByAllEmpruntQuery);ResultSet resultSet= preparedStatement.executeQuery()){
 
             while(resultSet.next()){
                 Emprunt emprunt=new Emprunt();
-
-                emprunts.add(emprunt.mapData(resultSet));
+                Emprunteur emprunteur = new Emprunteur();
+                emprunteur.setId(resultSet.getLong("emprunteur_id"));
+                emprunteur.mapData(resultSet);
+                emprunt.setEmprunteur(emprunteur);
                 try(PreparedStatement preparedStatementL=connection.prepareStatement(findByIdLivresQuery)){
-                    preparedStatement.setLong(1,resultSet.getLong("id"));
+                    preparedStatementL.setLong(1,resultSet.getLong("id"));
                     ResultSet resultSetL= preparedStatementL.executeQuery();
                     while(resultSetL.next()){
                         Livre livre=new Livre();
-                        livre.setId(resultSetL.getLong("id"));
+                        livre.setId(resultSetL.getLong("livre_id"));
                         livres.add(livre.mapData(resultSetL));
                     }
                     emprunt.setLivreList(livres);
                 }
-
+                emprunts.add(emprunt.mapData(resultSet));
             }
             return emprunts;
         }

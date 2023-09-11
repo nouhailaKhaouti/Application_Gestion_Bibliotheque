@@ -13,7 +13,7 @@ public class EmpruntService {
     LivreRepository livreRepository=new LivreRepository();
 
     public String save(Emprunt emprunt, List<Long> ids)throws SQLException {
-       for (Long id:ids){
+       for (Long id : ids){
           if(livreRepository.findById(id)==null){
               return "the book you want to add with the emprunt dosen't exist please choose one that exists";
           }

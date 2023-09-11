@@ -1,7 +1,7 @@
 package org.example.Service;
 
-import org.example.Model.Collection;
 import org.example.Model.Livre;
+import org.example.Model.Collection;
 import org.example.Repository.LivreRepository;
 
 import java.sql.SQLException;
@@ -13,6 +13,8 @@ public class LivreService {
    LivreRepository livreRepository=new LivreRepository();
     public String save(Livre livre)throws SQLException {
         if(livreRepository.livreExists(livre.getNumeroInventair())==0) {
+            Collection collection=collectionService.findByIsbn(livre.getCollection().getIsbn());
+            livre.setCollection(collection);
             if (livreRepository.save(livre)) {
                 return "livre is successfully added";
             }
@@ -58,9 +60,9 @@ public class LivreService {
     }
 
     public String Statistiques()throws SQLException{
-        Integer dispo=livreRepository.findByStatus("diponible").size();
-        Integer perdu=livreRepository.findByStatus("perdue").size();
-        Integer emprunte=livreRepository.findByStatus("emprunte").size();
+        Integer dispo=livreRepository.findByStatus("Disponible").size();
+        Integer perdu=livreRepository.findByStatus("Perdue").size();
+        Integer emprunte=livreRepository.findByStatus("Emprunte").size();
         return "the number of books available:"+dispo+" for borrowed books  :"+emprunte+" and lastly for lost books:"+perdu;
     }
 

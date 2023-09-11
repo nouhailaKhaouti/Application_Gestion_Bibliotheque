@@ -42,6 +42,7 @@ public class EmprunteurController {
             System.out.print("Enter Phone: ");
             String phone = scanner.next();
             Emprunteur emprunteur = new Emprunteur(membership, fullName, email, phone);
+            emprunteur.setId(id);
             return emprunteurService.update(emprunteur);
         }
         return "this emprunteur doesn't exists";

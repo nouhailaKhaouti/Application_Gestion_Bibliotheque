@@ -13,23 +13,21 @@ import java.util.*;
 
 public class EmpruntController {
     EmpruntService empruntService=new EmpruntService();
-
-    public String save(){
+    Scanner scanner = new Scanner(System.in);
+    public void save(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Emprunteur emprunteur=new Emprunteur();
-        Scanner scanner = new Scanner(System.in);
+
         List<Long> data = new ArrayList<>();
         System.out.print("Enter Emprunteur id : ");
         long emprunteur_id = scanner.nextLong();
-        //add the emprunteur check before adding to database
-        //also if there's more time add the emprunteur can't borrow a new book if  not returned the book he already borrowed before
         System.out.print("Enter End date: ");
-        String EndDate = scanner.nextLine();
+        String EndDate = scanner.next();
         emprunteur.setId(emprunteur_id);
         System.out.print("Entrer le nombre des livres emprunté par l'emprunteur ");
         Integer n= scanner.nextInt();
          for(int i=0;i<n;i++){
-             System.out.print("Entrer id de  "+i+"livre");
+             System.out.print("Entrer id de"+i+"livre");
              Long id=scanner.nextLong();
              data.add(id);
          }
@@ -39,14 +37,17 @@ public class EmpruntController {
             emprunt.setEndDate(dateFormat.parse(EndDate));
             emprunt.setReturne(false);
             emprunt.setEmprunteur(emprunteur);
-            return empruntService.save(emprunt,data);
+            System.out.print( empruntService.save(emprunt,data)+"\n");
         }catch (ParseException | SQLException e) {
             e.printStackTrace();
+            System.out.print("the save operation of emprunt failed \n");
         }
-        return "the save operation of emprunt failed";
+
     }
 
-    public String returne(Long id)throws SQLException{
+    public String returne()throws SQLException{
+        System.out.print("Enter Emprunt id : ");
+        long id = scanner.nextLong();
         return empruntService.returne(id);
     }
 

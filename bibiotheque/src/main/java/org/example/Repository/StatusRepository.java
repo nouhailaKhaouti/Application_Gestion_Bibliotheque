@@ -15,7 +15,7 @@ public class StatusRepository {
     Connection connection = db.connect();
     public boolean save(Status status) throws SQLException {
 
-        String insertCollectionQuery = "INSERT INTO Status (lable) VALUES (?)";
+        String insertCollectionQuery = "INSERT INTO Status (label) VALUES (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertCollectionQuery)) {
             preparedStatement.setString(1,status.getLabel());
 

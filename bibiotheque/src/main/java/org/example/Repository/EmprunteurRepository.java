@@ -88,7 +88,6 @@ public class EmprunteurRepository {
         String MembreShipEmprunteurQuery="Select * from Emprunteur where id=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(MembreShipEmprunteurQuery)){
             preparedStatement.setLong(1,id);
-
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Emprunteur emprunteur=new Emprunteur();

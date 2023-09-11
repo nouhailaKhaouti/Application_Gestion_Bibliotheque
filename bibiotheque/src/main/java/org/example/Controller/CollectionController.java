@@ -11,7 +11,8 @@ import java.util.Scanner;
 
 public class CollectionController {
      CollectionService collectionService=new CollectionService();
-    public String Update() throws SQLException {
+    public void Update() throws SQLException {
+        //can't add totale
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter ISBN: ");
         String isbn = scanner.next();
@@ -23,19 +24,24 @@ public class CollectionController {
         int totalBooks = scanner.nextInt();
         System.out.println("Provided ISBN: " + isbn);
         Collection collection=new Collection(isbn,title,totalBooks,author);
-        return collectionService.update(collection);
+        System.out.print( collectionService.update(collection));
     }
 
     public void findAll()throws SQLException{
-        List<Collection> collections=collectionService.findAll();
-        for(Collection collection:collections){
-            System.out.print("***********************");
-            System.out.print("Book:");
-            System.out.print("Title:"+collection.getTitle());
-            System.out.print("Auteur:"+collection.getAuteur());
-            System.out.print("Book disponible:"+collection.getTotale());
-            System.out.print("Isbn:"+collection.getIsbn());
+        List<Collection> collections = collectionService.findAll();
+
+        System.out.println("*********************************************************************************************************");
+        System.out.printf("| %-15s | %-30s | %-30s | %-20s | %-15s |%n", "Book", "Title", "Auteur", "Book disponible", "Isbn");
+        System.out.println("*********************************************************************************************************");
+        for (Collection collection : collections) {
+            System.out.printf("| %-15s | %-30s | %-30s | %-20d | %-15s |%n",
+                    " ",
+                    collection.getTitle(),
+                    collection.getAuteur(),
+                    collection.getTotale(),
+                    collection.getIsbn());
         }
+        System.out.println("********************************************************************************************************");
     }
 
     public void findByIsbn()throws SQLException{

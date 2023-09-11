@@ -66,9 +66,9 @@ public class Livre {
         Collection collection=new Collection();
         Status status=new Status();
         this.numeroInventair = resultSet.getString("numeroInventair");
-        this.collection.setId(resultSet.getLong("collection_id"));
+        collection.setId(resultSet.getLong("collection_id"));
         this.collection=collection.mapData(resultSet);
-        this.status.setId(resultSet.getLong("status_id"));
+        status.setId(resultSet.getLong("status_id"));
         this.status=status.mapData(resultSet);
         return this;
     }

@@ -74,7 +74,7 @@ public class LivreRepository {
         return livres;
     }
     public Livre findByNI(String numero)throws SQLException{
-        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where numeroinventair=?";
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where l.numeroinventair=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
             preparedStatement.setString(1,numero);
 
@@ -91,7 +91,7 @@ public class LivreRepository {
 
     public List<Livre> findByStatus(String status)throws SQLException{
         List<Livre> livres=new ArrayList<>();
-        String SelectLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id Where s.status=?";
+        String SelectLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id Where s.label=?";
 
         try(PreparedStatement preparedStatement=connection.prepareStatement(SelectLivreQuery)){
             preparedStatement.setString(1,status);
@@ -105,10 +105,9 @@ public class LivreRepository {
 
     }
     public Livre findById(Long id)throws SQLException{
-        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id where id=?";
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where l.id=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
             preparedStatement.setLong(1,id);
-
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
                 Livre livre=new Livre();
@@ -125,7 +124,7 @@ public class LivreRepository {
     public List<Livre> findByCollection(Long id)throws SQLException{
         List<Livre> livres=new ArrayList<>();
 
-        String collectionLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id where id=?";
+        String collectionLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where id=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(collectionLivreQuery)){
             preparedStatement.setLong(1,id);
 

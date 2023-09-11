@@ -109,6 +109,10 @@ public class MenuController {
                         livreController.statistique();
                         break;
                     case 18:
+                        System.out.print("-------- returner les livres -----------\n");
+                        empruntController.returne();
+                        break;
+                    case 19:
                         exit = true;
                         break;
                     default:
