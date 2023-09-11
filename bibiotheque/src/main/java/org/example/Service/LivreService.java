@@ -86,4 +86,11 @@ public class LivreService {
         return statistique;
     }
 
+    public String change_status_perdue(){
+        if(livreRepository.change_status_perdue()){
+            return "the status of lost books has changed successfully";
+        }
+        return "an error occurred while tring to change books status to lost ";
+    }
+
 }

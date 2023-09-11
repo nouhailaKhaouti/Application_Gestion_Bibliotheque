@@ -154,5 +154,8 @@ public class LivreController {
         System.out.println("+----------------------+");
     }
 
+    public void change_status_perdue(){
+        System.out.println(livreService.change_status_perdue());
+    }
 
 }

@@ -166,4 +166,15 @@ public class LivreRepository {
                 return livres;
         }
     }
+
+    public boolean change_status_perdue(){
+        String sql="SELECT update_livre_status_perdue()";
+        try(PreparedStatement preparedStatement=connection.prepareStatement(sql)){
+            preparedStatement.execute();
+            return true;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

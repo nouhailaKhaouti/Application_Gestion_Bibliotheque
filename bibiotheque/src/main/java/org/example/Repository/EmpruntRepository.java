@@ -136,13 +136,11 @@ public class EmpruntRepository {
                         livres.add(livre);
                     }
                 }
-
                 emprunt.setEmprunteur(emprunteur);
                 emprunt.setLivreList(livres);
                 emprunts.add(emprunt.mapData(resultSet));
             }
         }
-
         return emprunts;
     }
 
@@ -186,7 +184,6 @@ public class EmpruntRepository {
             if(resultSet.next()){
                 return resultSet.getInt("count");
             }
-
         }catch (SQLException e){
             e.printStackTrace();
             return null;

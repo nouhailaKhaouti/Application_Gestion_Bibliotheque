@@ -1,14 +1,9 @@
 package org.example;
 import org.example.Controller.AuthentificationController;
-import org.example.Controller.EmpruntController;
 import org.example.Controller.MenuController;
-import org.example.Model.Status;
 
 import java.sql.SQLException;
 
-
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
 
 public class Main {
 

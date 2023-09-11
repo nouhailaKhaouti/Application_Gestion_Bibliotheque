@@ -1,11 +1,9 @@
 package org.example.Controller;
-
-import org.example.Model.Collection;
-import org.example.Model.Livre;
-import org.example.Model.Status;
-
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MenuController {
     LivreController livreController = new LivreController();
@@ -16,6 +14,17 @@ public class MenuController {
 
     //returne logique
     public void displayMenu() throws SQLException {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        Runnable task = () -> {
+            livreController.change_status_perdue();
+            System.out.println("Function executed every 24 hours.");
+        };
+
+        long initialDelay = 0;
+        long period = 24 * 60 * 60;
+
+        scheduler.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
         boolean exit = false;
         Scanner scanner = new Scanner(System.in);
         while (!exit) {
