@@ -135,7 +135,7 @@ public class LivreRepository {
     }
 
     public Livre findByAuthor(String author)throws SQLException{
-        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c.autheur=?";
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c.auteur=?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
             preparedStatement.setString(1,author);
             ResultSet resultSet=preparedStatement.executeQuery();

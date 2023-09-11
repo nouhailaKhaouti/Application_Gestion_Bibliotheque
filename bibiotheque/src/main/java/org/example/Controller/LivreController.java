@@ -5,7 +5,9 @@ import org.example.Model.Livre;
 import org.example.Service.CollectionService;
 import org.example.Service.LivreService;
 
+import java.net.SocketOption;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,12 +63,17 @@ public class LivreController {
         System.out.print("Enter the Author of the livre");
         String author= scanner.next();
         Livre livre=livreService.findByAuthor(author);
-        System.out.print("***********************");
-        System.out.print("Book:");
-        System.out.print("Title:"+livre.getCollection().getTitle());
-        System.out.print("Auteur:"+livre.getCollection().getAuteur());
-        System.out.print("Isbn:"+livre.getCollection().getIsbn());
-        System.out.print("Stat:"+livre.getStatus().getLabel());
+        if(livre!=null) {
+            System.out.print("***********************\n");
+            System.out.print("Book:\n");
+            System.out.print("Title:" + livre.getCollection().getTitle()+"\n");
+            System.out.print("Auteur:" + livre.getCollection().getAuteur()+"\n");
+            System.out.print("Isbn:" + livre.getCollection().getIsbn()+"\n");
+            System.out.print("Stat:" + livre.getStatus().getLabel()+"\n");
+        }else{
+            System.out.println("the book with Author :"+author+"is null");
+        }
+
     }
 
     public void findByTitre()throws SQLException{
@@ -74,12 +81,16 @@ public class LivreController {
         System.out.print("Enter the title of the livre");
         String titre= scanner.next();
         Livre livre=livreService.findByTitre(titre);
-        System.out.print("***********************");
-        System.out.print("Book:");
-        System.out.print("Title:"+livre.getCollection().getTitle());
-        System.out.print("Auteur:"+livre.getCollection().getAuteur());
-        System.out.print("Isbn:"+livre.getCollection().getIsbn());
-        System.out.print("Stat:"+livre.getStatus().getLabel());
+        if(livre!=null) {
+            System.out.print("***********************\n");
+            System.out.print("Book:\n");
+            System.out.print("Title:" + livre.getCollection().getTitle() + "\n");
+            System.out.print("Auteur:" + livre.getCollection().getAuteur() + "\n");
+            System.out.print("Isbn:" + livre.getCollection().getIsbn() + "\n");
+            System.out.print("Stat:" + livre.getStatus().getLabel() + "\n");
+        }else{
+            System.out.println("\nthis book with title:"+titre+" doesn't exist\n");
+        }
     }
 
     public void findAll()throws SQLException{
