@@ -72,6 +72,11 @@ public class Collection {
     }
 
 
+    public Collection(String isbn, String title, String auteur) {
+        this.isbn = isbn;
+        this.title = title;
+        this.auteur = auteur;
+    }
 
     public Collection mapData(ResultSet resultSet) throws SQLException {
 

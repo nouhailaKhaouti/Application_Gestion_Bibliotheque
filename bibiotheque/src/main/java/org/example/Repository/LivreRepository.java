@@ -119,6 +119,36 @@ public class LivreRepository {
         return null;
     }
 
+    public Livre findByTitre(String title)throws SQLException{
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c.title=?";
+        try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
+            preparedStatement.setString(1,title);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                Livre livre=new Livre();
+                livre.setId(resultSet.getLong("id"));
+                livre.mapData(resultSet);
+                return livre;
+            }
+        }
+        return null;
+    }
+
+    public Livre findByAuthor(String author)throws SQLException{
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c.autheur=?";
+        try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
+            preparedStatement.setString(1,author);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                Livre livre=new Livre();
+                livre.setId(resultSet.getLong("id"));
+                livre.mapData(resultSet);
+                return livre;
+            }
+        }
+        return null;
+    }
+
 
 
     public List<Livre> findByCollection(Long id)throws SQLException{

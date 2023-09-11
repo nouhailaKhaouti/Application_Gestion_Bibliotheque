@@ -14,29 +14,34 @@ public class MenuController {
     CollectionController collectionController = new CollectionController();
     EmprunteurController emprunteurController = new EmprunteurController();
 
+    //returne logique
     public void displayMenu() throws SQLException {
         boolean exit = false;
         Scanner scanner = new Scanner(System.in);
         while (!exit) {
             System.out.println("**********\nLibrary Management Menu:**********");
             System.out.println("1. Ajouter Un Nouveau Livre");
-            System.out.println("2. Supprimer Un Livre");
             System.out.println("3. Modifier Une Collection");
+            System.out.println("2. Supprimer Un Livre");
             System.out.println("4. Afficher touts les collections");
             System.out.println("5. Afficher Un Livre à partir de son Auteur");
-            System.out.println("6. Afficher Tout Les Livres ");
-            System.out.println("7. Ajouter Une Nouvelle Collection");
-            System.out.println("8. Afficher Une collection a partir d'Isbn");
-            System.out.println("9. Emprunter Un Livre");
-            System.out.println("10. Afficher Les Livres Empruntés et Les Informations d'Emprunteur ");
-            System.out.println("11. Ajouter Un Nouveau Status");
-            System.out.println("12. Ajouter Un Nouveau emprunteur");
-            System.out.println("13. Modifier Un  emprunteur");
-            System.out.println("14. Supprimer Un  emprunteur");
-            System.out.println("15. Afficher touts les emprunteurs");
-            System.out.println("16. Afficher un emprunteur selon son memberShip");
-            System.out.println("17. Afficher Les Statistiques");
-            System.out.println("18. Exit");
+            System.out.println("6. Afficher Un Livre à partir de son Titre");
+            System.out.println("7. Afficher Un Livre à partir de son NumeroInventair");
+            System.out.println("8. Afficher Tout Les Livres Disponible");
+            System.out.println("9. Afficher Une collection a partir d'Isbn");
+            System.out.println("10. Emprunter Un Livre");
+            System.out.println("11. Afficher Les Livres Empruntés et Les Informations d'Emprunteur ");
+            System.out.println("12.  returner un livre ");
+            System.out.println("13. Ajouter Un Nouveau Status");
+            System.out.println("14. Modifier Un Nouveau Status");
+            System.out.println("15. Supprimer Un Nouveau Status");
+            System.out.println("16. Ajouter Un Nouveau emprunteur");
+            System.out.println("17. Modifier Un  emprunteur");
+            System.out.println("18. Supprimer Un  emprunteur");
+            System.out.println("19. Afficher touts les emprunteurs");
+            System.out.println("20. Afficher un emprunteur selon son memberShip");
+            System.out.println("21. Afficher Les Statistiques");
+            System.out.println("22. Exit");
 
             System.out.print("Enter your choice: ");
 
@@ -44,75 +49,79 @@ public class MenuController {
                 int choice = scanner.nextInt();
 
                 switch (choice) {
-                    case 1:
-                        livreController.save();
-                        break;
-                    case 2:
-                        livreController.Delete();
-                        break;
-                    case 3:
-                        collectionController.Update();
-                        break;
-                    case 4:
-                        collectionController.findAll();
-                        break;
+                    case 1:livreController.save(); break;
+                    case 2:collectionController.Update();break;
+                    case 3:livreController.Delete(); break;
+                    case 4:collectionController.findAll();break;
                     case 5:
-                        System.out.print("***** L'affichage d'un livre à partir de son numero inventair*****\n");
-                        livreController.findByNI();
+                        System.out.print("***** L'affichage d'un livre à partir de son autheur*****\n");
+                        livreController.findByAuthor();
                         break;
                     case 6:
-                        System.out.print("***** L'affichage e tout les livres et chacun avec leur statuts*****\n");
-                        livreController.findAll();
-
+                        System.out.print("***** L'affichage d'un livre à partir de son titre*****\n");
+                        livreController.findByTitre();
                         break;
                     case 7:
-                        System.out.print("***** L'ajout d'une nouvelle collection *****\n");
+                        System.out.print("***** L'affichage d'un livre à partir de son numero inventair *****\n");
+                        livreController.findByNI();
                         break;
                     case 8:
-                        System.out.println("------- Affichage du Collection à partir d'Isbn --------\n");
-                        collectionController.findByIsbn();
+                        System.out.println("------- Affichage les livres disponibles --------\n");
+                        livreController.findDisponible();
                         break;
                     case 9:
+                        System.out.println("------- Affichage une collection à partir de ISBN --------\n");
+                        collectionController.findByIsbn();
+                        break;
+                    case 10:
                         System.out.print("------------ Emprunter Un Livre ------------\n ");
                         empruntController.save();
                         break;
-                    case 10:
+                    case 11:
                         System.out.print("---------- Affichage Des Livres Empruntés avec Les informations des Emprunteurs ----------\n ");
                         empruntController.findAll();
                         break;
-                    case 11:
+                    case 12:
+                        System.out.print("---------- Returner un livre ----------\n ");
+                        empruntController.returne();
+                        break;
+                    case 13:
                         System.out.print("--------- Ajout d'un nouveau Status --------- \n");
                         statusController.save();
                         break;
-                    case 12:
+                    case 14:
+                        System.out.print("--------- Modifie d'un  Status --------- \n");
+                        statusController.update();
+                        break;
+                    case 15:
+                        System.out.print("--------- Suppression d'un  Status --------- \n");
+                        statusController.delete();
+                        break;
+                    case 16:
                         System.out.print("--------- Ajout d'un nouveau Emprunteur --------- \n");
                         emprunteurController.save();
                         break;
-                    case 13:
+                    case 17:
                         System.out.print("--------- Modifier d'un  Emprunteur --------- \n");
                         emprunteurController.update();
                         break;
-                    case 14:
-                        System.out.print("--------- Supprimer d'un  Emprunteur --------- \n");
+                    case 18:
+                        System.out.print("--------- Suppression d'un  Emprunteur --------- \n");
                         emprunteurController.delete();
                         break;
-                    case 15:
+                    case 19:
                         System.out.print("--------- Affichage de touts les Emprunteurs --------- \n");
                         emprunteurController.findAll();
                         break;
-                    case 16:
+                    case 20:
                         System.out.print("--------- Affichage d'un Emprunteur selon son MemberShip --------- \n");
                         emprunteurController.findByMemberShip();
                         break;
-                    case 17:
+                    case 21:
                         System.out.print("-------- L'affichage des statistiques -----------\n");
                         livreController.statistique();
                         break;
-                    case 18:
-                        System.out.print("-------- returner les livres -----------\n");
-                        empruntController.returne();
-                        break;
-                    case 19:
+                    case 22:
                         exit = true;
                         break;
                     default:

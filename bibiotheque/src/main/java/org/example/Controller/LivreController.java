@@ -14,7 +14,7 @@ public class LivreController {
     CollectionService collectionService=new CollectionService();
 
 
-    public String save()throws SQLException {
+    public void save()throws SQLException {
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter the Isbn of the livre");
         String isbn= scanner.next();
@@ -24,10 +24,8 @@ public class LivreController {
             String title = scanner.next();
             System.out.print("Enter Author: ");
             String author = scanner.next();
-            System.out.print("Enter Total Number of Books: ");
-            int totalBooks = scanner.nextInt();
             System.out.println("Provided ISBN: " + isbn);
-            Collection collection=new Collection(isbn,title,totalBooks,author);
+            Collection collection=new Collection(isbn,title,0,author);
             collectionN=collection;
             collectionService.save(collectionN);
         }
@@ -35,14 +33,14 @@ public class LivreController {
         String numero=scanner.next();
         Livre livre=new Livre(numero,collectionN);
 
-        return livreService.save(livre);
+        System.out.print(livreService.save(livre));
     }
 
-    public String Delete()throws SQLException{
+    public void Delete()throws SQLException{
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter the Numero d' inventair of the livre");
         String numero= scanner.next();
-        return livreService.delete(numero);
+        System.out.print(livreService.delete(numero));
     }
 
     public void findByNI()throws SQLException{
@@ -54,7 +52,32 @@ public class LivreController {
         System.out.print("Book:");
         System.out.print("Title:"+livre.getCollection().getTitle());
         System.out.print("Auteur:"+livre.getCollection().getAuteur());
-        System.out.print("Book disponible:"+livre.getCollection().getTotale());
+        System.out.print("Isbn:"+livre.getCollection().getIsbn());
+        System.out.print("Stat:"+livre.getStatus().getLabel());
+    }
+
+    public void findByAuthor()throws SQLException{
+        Scanner scanner=new Scanner(System.in);
+        System.out.print("Enter the Author of the livre");
+        String author= scanner.next();
+        Livre livre=livreService.findByAuthor(author);
+        System.out.print("***********************");
+        System.out.print("Book:");
+        System.out.print("Title:"+livre.getCollection().getTitle());
+        System.out.print("Auteur:"+livre.getCollection().getAuteur());
+        System.out.print("Isbn:"+livre.getCollection().getIsbn());
+        System.out.print("Stat:"+livre.getStatus().getLabel());
+    }
+
+    public void findByTitre()throws SQLException{
+        Scanner scanner=new Scanner(System.in);
+        System.out.print("Enter the title of the livre");
+        String titre= scanner.next();
+        Livre livre=livreService.findByTitre(titre);
+        System.out.print("***********************");
+        System.out.print("Book:");
+        System.out.print("Title:"+livre.getCollection().getTitle());
+        System.out.print("Auteur:"+livre.getCollection().getAuteur());
         System.out.print("Isbn:"+livre.getCollection().getIsbn());
         System.out.print("Stat:"+livre.getStatus().getLabel());
     }
@@ -81,8 +104,44 @@ public class LivreController {
         System.out.println("************************************************************************************************");
     }
 
-    public void statistique()throws SQLException{
-       System.out.print( livreService.Statistiques()+"\n");
+    public void findDisponible()throws SQLException{
+        List<Livre> livres = livreService.findDisponible();
+
+        System.out.println("************************************************************************************************");
+        System.out.printf("| %-15s | %-20s | %-30s | %-20s | %-20s | %-15s | %-10s |%n",
+                "Book", "Num Inventair", "Title", "Auteur", "Book disponible", "Isbn");
+        System.out.println("************************************************************************************************");
+
+        for (Livre livre : livres) {
+            System.out.printf("| %-15s | %-20s | %-30s | %-20s | %-20d | %-15s |%n",
+                    " ",
+                    livre.getNumeroInventair(),
+                    livre.getCollection().getTitle(),
+                    livre.getCollection().getAuteur(),
+                    livre.getCollection().getTotale(),
+                    livre.getCollection().getIsbn());
+        }
+
+        System.out.println("************************************************************************************************");
     }
+
+    public void statistique() throws SQLException {
+        System.out.println("+----------------------+");
+        System.out.println("| Statistiques         |");
+        System.out.println("+----------------------+");
+
+        System.out.println("| Disponible");
+        System.out.println("| " + livreService.Statistiques("Disponible"));
+        System.out.println("|");
+
+        System.out.println("| Emprunté");
+        System.out.println("| " + livreService.Statistiques("Emprunte"));
+        System.out.println("|");
+
+        System.out.println("| Perdue");
+        System.out.println("| " + livreService.Statistiques("Perdue"));
+        System.out.println("+----------------------+");
+    }
+
 
 }

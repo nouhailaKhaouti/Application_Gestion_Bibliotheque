@@ -37,14 +37,18 @@ public class StatusController {
         return statusService.delete(id);
     }
 
-    public void findAll()throws SQLException{
+    public void findAll() throws SQLException {
+        List<Status> statusList = statusService.findAll();
 
-        List<Status> statusList=statusService.findAll();
-        for(Status status:statusList){
-            System.out.print("************************");
-            System.out.print("status id:"+status.getId());
-            System.out.print("status label:"+status.getLabel());
-            System.out.print("************************");
+        System.out.println("+----------------------+");
+        System.out.println("| Status Information   |");
+        System.out.println("+----------------------+");
+
+        for (Status status : statusList) {
+            System.out.println("| Status ID: " + status.getId());
+            System.out.println("| Status Label: " + status.getLabel());
+            System.out.println("+----------------------+");
         }
     }
+
 }

@@ -2,7 +2,6 @@ package org.example.Controller;
 
 
 import org.example.Model.Collection;
-import org.example.Repository.CollectionRepository;
 import org.example.Service.CollectionService;
 
 import java.sql.SQLException;
@@ -12,7 +11,6 @@ import java.util.Scanner;
 public class CollectionController {
      CollectionService collectionService=new CollectionService();
     public void Update() throws SQLException {
-        //can't add totale
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter ISBN: ");
         String isbn = scanner.next();
@@ -20,10 +18,8 @@ public class CollectionController {
         String title = scanner.next();
         System.out.print("Enter Author: ");
         String author = scanner.next();
-        System.out.print("Enter Total Number of Books: ");
-        int totalBooks = scanner.nextInt();
         System.out.println("Provided ISBN: " + isbn);
-        Collection collection=new Collection(isbn,title,totalBooks,author);
+        Collection collection=new Collection(isbn,title,author);
         System.out.print( collectionService.update(collection));
     }
 
@@ -44,17 +40,21 @@ public class CollectionController {
         System.out.println("********************************************************************************************************");
     }
 
-    public void findByIsbn()throws SQLException{
-        Scanner scanner=new Scanner(System.in);
+    public void findByIsbn() throws SQLException {
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter ISBN: ");
         String isbn = scanner.next();
-        Collection collection=collectionService.findByIsbn(isbn);
-        System.out.print("***********************");
-        System.out.print("Book:");
-        System.out.print("Title:"+collection.getTitle());
-        System.out.print("Auteur:"+collection.getAuteur());
-        System.out.print("Book disponible:"+collection.getTotale());
+        Collection collection = collectionService.findByIsbn(isbn);
+
+        System.out.println("+-------------------------+");
+        System.out.println("| Book Information        |");
+        System.out.println("+-------------------------+");
+        System.out.println("| Title: " + collection.getTitle());
+        System.out.println("| Auteur: " + collection.getAuteur());
+        System.out.println("| Book disponible: " + collection.getTotale());
+        System.out.println("+-------------------------+");
     }
+
 
 
 }

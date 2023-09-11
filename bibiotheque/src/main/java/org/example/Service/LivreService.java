@@ -43,8 +43,14 @@ public class LivreService {
     }
 
     public List<Livre> findAll()throws  SQLException{
-        List<Livre> livres=new ArrayList<>();
-        livres=livreRepository.findAll();
+        List<Livre> livres=livreRepository.findAll();
+        if(livres.size()==0){
+            return null;
+        }
+        return livres;
+    }
+    public List<Livre> findDisponible()throws  SQLException{
+        List<Livre> livres=livreRepository.findByStatus("Disponible");
         if(livres.size()==0){
             return null;
         }
@@ -59,11 +65,25 @@ public class LivreService {
         return null;
     }
 
-    public String Statistiques()throws SQLException{
-        Integer dispo=livreRepository.findByStatus("Disponible").size();
-        Integer perdu=livreRepository.findByStatus("Perdue").size();
-        Integer emprunte=livreRepository.findByStatus("Emprunte").size();
-        return "the number of books available:"+dispo+" for borrowed books  :"+emprunte+" and lastly for lost books:"+perdu;
+    public Livre findByAuthor(String author)throws SQLException{
+        Livre livre=livreRepository.findByAuthor(author);
+        if(livre!=null){
+            return livre;
+        }
+        return null;
+    }
+
+    public Livre findByTitre(String title)throws SQLException{
+        Livre livre=livreRepository.findByTitre(title);
+        if(livre!=null){
+            return livre;
+        }
+        return null;
+    }
+
+    public Integer Statistiques(String label)throws SQLException{
+        Integer statistique=livreRepository.findByStatus(label).size();
+        return statistique;
     }
 
 }

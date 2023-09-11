@@ -29,7 +29,6 @@ public class EmpruntRepository {
                 if (affectedRows == 0) {
                     return false;
                 }
-
                 try (var generatedKeys = empruntPreparedStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int empruntId = generatedKeys.getInt(1);
@@ -49,10 +48,10 @@ public class EmpruntRepository {
         return false;
     }
 
-    public boolean update(Boolean returne,Long id)throws SQLException{
+    public boolean update(Long id)throws SQLException{
         String UpdateEmpruntQuery="Update Emprunt Set returne=? Where id=?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(UpdateEmpruntQuery)){
-            preparedStatement.setBoolean(1,returne);
+            preparedStatement.setBoolean(1,true);
             preparedStatement.setLong(2,id);
 
             int rowDeleted=preparedStatement.executeUpdate();
@@ -62,13 +61,11 @@ public class EmpruntRepository {
 
     public boolean delete(Long id)throws SQLException{
 
-        String deleteEmpruntQuery="Delete From Emprunt Where id=?";
-        String deleteLivreEmprunt="Delete from LivreEmprunt where emprunt_id=(Select id from Emprunt Where id=?)";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(deleteEmpruntQuery);PreparedStatement preparedStatementS = connection.prepareStatement(deleteLivreEmprunt)){
-            preparedStatement.setLong(1,id);
+        String deleteLivreEmprunt="Delete from LivreEmprunt where livre_id=?";
+        try( PreparedStatement preparedStatementS = connection.prepareStatement(deleteLivreEmprunt)){
             preparedStatementS.setLong(1,id);
 
-            int rowDeleted=preparedStatement.executeUpdate();
+            int rowDeleted=preparedStatementS.executeUpdate();
             return rowDeleted > 0;
         }
     }
@@ -105,33 +102,96 @@ public class EmpruntRepository {
         return null;
     }
 
-    public List<Emprunt> findByAll()throws SQLException{
-        List<Emprunt> emprunts=new ArrayList<>();
-        List<Livre> livres=new ArrayList<>();
-        String findByAllEmpruntQuery="Select em.*,E.fullname,E.membreship,E.email,E.phone  From Emprunt em join emprunteur E ON em.emprunteur_id=E.id ";
-        String findByIdLivresQuery="SELECT L.*,C.*,S.*,LE.* FROM LivreEmprunt LE  JOIN Livre L ON LE.livre_id = L.id  JOIN Collection C ON L.collection_id = C.id  JOIN Status S ON L.status_id = S.id where LE.emprunt_id=?";
-        try(PreparedStatement preparedStatement=connection.prepareStatement(findByAllEmpruntQuery);ResultSet resultSet= preparedStatement.executeQuery()){
+    public List<Emprunt> findByAll() throws SQLException {
+        List<Emprunt> emprunts = new ArrayList<>();
+        String findByAllEmpruntQuery = "SELECT em.*, E.fullname, E.membreship, E.email, E.phone " +
+                "FROM Emprunt em " +
+                "JOIN Emprunteur E ON em.emprunteur_id = E.id";
+        String findByIdLivresQuery = "SELECT L.*, C.*, S.*, LE.* " +
+                "FROM LivreEmprunt LE " +
+                "JOIN Livre L ON LE.livre_id = L.id " +
+                "JOIN Collection C ON L.collection_id = C.id " +
+                "JOIN Status S ON L.status_id = S.id " +
+                "WHERE LE.emprunt_id = ?";
 
-            while(resultSet.next()){
-                Emprunt emprunt=new Emprunt();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(findByAllEmpruntQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Emprunt emprunt = new Emprunt();
+
                 Emprunteur emprunteur = new Emprunteur();
                 emprunteur.setId(resultSet.getLong("emprunteur_id"));
                 emprunteur.mapData(resultSet);
-                emprunt.setEmprunteur(emprunteur);
-                try(PreparedStatement preparedStatementL=connection.prepareStatement(findByIdLivresQuery)){
-                    preparedStatementL.setLong(1,resultSet.getLong("id"));
-                    ResultSet resultSetL= preparedStatementL.executeQuery();
-                    while(resultSetL.next()){
-                        Livre livre=new Livre();
+
+                List<Livre> livres = new ArrayList<>();
+                try (PreparedStatement preparedStatementL = connection.prepareStatement(findByIdLivresQuery)) {
+                    preparedStatementL.setLong(1, resultSet.getLong("id"));
+                    ResultSet resultSetL = preparedStatementL.executeQuery();
+
+                    while (resultSetL.next()) {
+                        Livre livre = new Livre();
                         livre.setId(resultSetL.getLong("livre_id"));
                         livres.add(livre.mapData(resultSetL));
+                        livres.add(livre);
                     }
-                    emprunt.setLivreList(livres);
                 }
+
+                emprunt.setEmprunteur(emprunteur);
+                emprunt.setLivreList(livres);
                 emprunts.add(emprunt.mapData(resultSet));
             }
-            return emprunts;
         }
+
+        return emprunts;
+    }
+
+    public Integer checkCount(Long id){
+        String sql="Select count(*) from livreemprunt where emprunt_id=?";
+        try(PreparedStatement preparedStatement=connection.prepareStatement(sql)){
+            preparedStatement.setLong(1,id);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return 0;
+    }
+
+    public Emprunt findEmpruntLivre(Livre livre){
+        String sql="Select e.* from emprunt e join livreemprunt le on e.id=le.emprunt_id join livre l on le.livre_id=l.id where l.id=?";
+        try (PreparedStatement preparedStatement=connection.prepareStatement(sql)){
+            preparedStatement.setLong(1,livre.getId());
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                Emprunt emprunt=new Emprunt();
+                emprunt.mapData(resultSet);
+                return emprunt;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+    public Integer findByEmprunteur(Emprunt emprunt){
+        String sql="Select count(*) emprunt where emprunteur_id=? And returne=false";
+        try(PreparedStatement preparedStatement=connection.prepareStatement(sql)){
+            preparedStatement.setLong(1,emprunt.getEmprunteur().getId());
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt("count");
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
     }
 
 }
