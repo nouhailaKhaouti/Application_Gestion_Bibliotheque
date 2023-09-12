@@ -1,4 +1,4 @@
-package org.example.Service;
+package org.example.Service.Impl;
 
 import org.example.Model.Status;
 import org.example.Repository.StatusRepository;

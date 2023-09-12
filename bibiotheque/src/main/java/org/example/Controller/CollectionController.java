@@ -2,7 +2,7 @@ package org.example.Controller;
 
 
 import org.example.Model.Collection;
-import org.example.Service.CollectionService;
+import org.example.Service.Impl.CollectionService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 public class CollectionController {
      CollectionService collectionService=new CollectionService();
+
+
     public void Update() throws SQLException {
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter ISBN: ");
@@ -54,7 +56,4 @@ public class CollectionController {
         System.out.println("| Book disponible: " + collection.getTotale());
         System.out.println("+-------------------------+");
     }
-
-
-
 }

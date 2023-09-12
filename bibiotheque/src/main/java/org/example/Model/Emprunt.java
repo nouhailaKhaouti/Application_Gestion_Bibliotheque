@@ -22,6 +22,13 @@ public class Emprunt {
         this.emprunteur = emprunteur;
     }
 
+    public Emprunt(Date startDate, Date endDate, Boolean returne, Emprunteur emprunteur) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.returne = returne;
+        this.emprunteur = emprunteur;
+    }
+
     public Emprunt() {
     }
 

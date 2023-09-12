@@ -1,4 +1,4 @@
-package org.example.Service;
+package org.example.Service.Impl;
 
 import org.example.Model.Emprunt;
 import org.example.Model.Emprunteur;
@@ -20,8 +20,11 @@ public class EmpruntService {
         List<Long> ids=new ArrayList<>();
        for (String NI : NIs){
            Livre livre=livreRepository.findByNI(NI);
-          if(livre==null || livre.getStatus().getLabel()!="Disponible"){
-              return "the book you want to add with the emprunt dosen't exist please choose one that exists";
+          if(livre==null ){
+              return "the book "+livre.getNumeroInventair()+" you want to add with the emprunt dosen't exist or not available please choose one that exists";
+          }
+          if( livre.getStatus().getId()!=1){
+              return "this book is not available for now you may try again after";
           }
           ids.add(livre.getId());
        }

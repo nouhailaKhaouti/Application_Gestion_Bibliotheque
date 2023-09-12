@@ -1,7 +1,7 @@
 package org.example.Controller;
 
 import org.example.Model.Emprunteur;
-import org.example.Service.EmprunteurService;
+import org.example.Service.Impl.EmprunteurService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,6 +20,10 @@ public class EmprunteurController {
         System.out.print("Enter Phone: ");
         String phone = scanner.next();
         Emprunteur emprunteur=new Emprunteur(membership,fullName,email,phone);
+        if(emprunteurService.findByMemberShip(membership)!=null){
+            System.out.print( "this membership already exist");
+            return;
+        }
         boolean res=emprunteurService.save(emprunteur);
         if (res){
             System.out.print( "this emprunteur has been added successfully");
@@ -46,7 +50,6 @@ public class EmprunteurController {
         }
         return "this emprunteur doesn't exists";
     }
-
     public String delete()throws SQLException{
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter id: ");
@@ -77,8 +80,6 @@ public class EmprunteurController {
             System.out.println("+------------------------+");
         }
     }
-
-
     public void findByMemberShip() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter memberShip: ");
@@ -94,6 +95,4 @@ public class EmprunteurController {
         System.out.println("| Email: " + emprunteur.getEmail());
         System.out.println("+------------------------+");
     }
-
-
 }

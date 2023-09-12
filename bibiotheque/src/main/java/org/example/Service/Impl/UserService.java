@@ -1,4 +1,4 @@
-package org.example.Service;
+package org.example.Service.Impl;
 
 import org.example.Model.User;
 import org.example.Repository.UserRepository;
@@ -12,7 +12,7 @@ public class UserService {
 
     public User authenticate(User userC) {
         User user = userRepository.findByUsername(userC);
-        if(user.getPassword().equals(userC.getPassword()) && user!=null){
+        if(user!=null && user.getPassword().equals(userC.getPassword())){
             return user;
         }else{
             return null;

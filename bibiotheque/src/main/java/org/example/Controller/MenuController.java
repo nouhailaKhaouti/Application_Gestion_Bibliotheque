@@ -1,9 +1,7 @@
 package org.example.Controller;
 import java.sql.SQLException;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 
 public class MenuController {
     LivreController livreController = new LivreController();
@@ -12,45 +10,51 @@ public class MenuController {
     CollectionController collectionController = new CollectionController();
     EmprunteurController emprunteurController = new EmprunteurController();
 
-    //returne logique
     public void displayMenu() throws SQLException {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-        Runnable task = () -> {
-            livreController.change_status_perdue();
-            System.out.println("Function executed every 24 hours.");
-        };
-
-        long initialDelay = 0;
-        long period = 24 * 60 * 60;
-
-        scheduler.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
         boolean exit = false;
         Scanner scanner = new Scanner(System.in);
+        String reset = "\u001B[0m";
+        String green = "\u001B[32m";
+        String yellow = "\u001B[33m";
+        String cyan = "\u001B[36m";
+        String bold = "\u001B[1m";
+        String purple="\\u001B[45m";
+
+        // ASCII art for the header
+        String header = bold + purple +
+                "    _                   ____      _       ____     __   __      __  __      _      _   _       _       ____  U _____ u  __  __  U _____ u _   _     _____   \n" +
+                "  |\"|        ___    U | __\")uU  /\"\\  uU |  _\"\\ u  \\ \\ / /    U|' \\/ '|uU  /\"\\  u | \\ |\"|  U  /\"\\  uU /\"___|u\\| ___\"|/U|' \\/ '|u\\| ___\"|/| \\ |\"|   |_ \" _|  \n" +
+                "U | | u     |_\"_|    \\|  _ \\/ \\/ _ \\/  \\| |_) |/   \\ V /     \\| |\\/| |/ \\/ _ \\/ <|  \\| |>  \\/ _ \\/ \\| |  _ / |  _|\"  \\| |\\/| |/ |  _|\" <|  \\| |>    | |    \n" +
+                "\\| |/__     | |      | |_) | / ___ \\   |  _ <    U_|\"|_u     | |  | |  / ___ \\ U| |\\  |u  / ___ \\  | |_| |  | |___   | |  | |  | |___ U| |\\  |u   /| |\\   \n" +
+                "  |_____|  U/| |\\u    |____/ /_/   \\_\\  |_| \\_\\     |_|       |_|  |_| /_/   \\_\\ |_| \\_|  /_/   \\_\\  \\____|  |_____|  |_|  |_|  |_____| |_| \\_|   u |_|U   \n" +
+                " //  \\\\.-,_|___|_,-._|| \\\\_  \\\\    >>  //   \\\\_.-,//|(_     <<,-,,-.   \\\\    >> ||   \\\\,-.\\\\    >>  _)(|_   <<   >> <<,-,,-.   <<   >> ||   \\\\,-._// \\\\_  \n" +
+                "(_\")(\"_)\\_)-' '-(_/(__) (__)(__)  (__)(__)  (__)\\_) (__)     (./  \\.) (__)  (__)(_\")  (_/(__)  (__)(__)__) (__) (__) (./  \\.) (__) (__)(_\")  (_/(__) (__) " + reset + "\n";
+
+        System.out.println(header);
         while (!exit) {
             System.out.println("**********\nLibrary Management Menu:**********");
-            System.out.println("1. Ajouter Un Nouveau Livre");
-            System.out.println("3. Modifier Une Collection");
-            System.out.println("2. Supprimer Un Livre");
-            System.out.println("4. Afficher touts les collections");
-            System.out.println("5. Afficher Un Livre à partir de son Auteur");
-            System.out.println("6. Afficher Un Livre à partir de son Titre");
-            System.out.println("7. Afficher Un Livre à partir de son NumeroInventair");
-            System.out.println("8. Afficher Tout Les Livres Disponible");
-            System.out.println("9. Afficher Une collection a partir d'Isbn");
-            System.out.println("10. Emprunter Un Livre");
-            System.out.println("11. Afficher Les Livres Empruntés et Les Informations d'Emprunteur ");
-            System.out.println("12.  returner un livre ");
-            System.out.println("13. Ajouter Un Nouveau Status");
-            System.out.println("14. Modifier Un Nouveau Status");
-            System.out.println("15. Supprimer Un Nouveau Status");
-            System.out.println("16. Ajouter Un Nouveau emprunteur");
-            System.out.println("17. Modifier Un  emprunteur");
-            System.out.println("18. Supprimer Un  emprunteur");
-            System.out.println("19. Afficher touts les emprunteurs");
-            System.out.println("20. Afficher un emprunteur selon son memberShip");
-            System.out.println("21. Afficher Les Statistiques");
-            System.out.println("22. Exit");
+            System.out.println("1."+ yellow + bold +" Ajouter Un Nouveau Livre"+reset);
+            System.out.println("2. "+ cyan + bold +"Modifier Une Collection"+reset);
+            System.out.println("3. "+ yellow + bold +" Supprimer Un Livre"+reset);
+            System.out.println("4."+ cyan + bold +" Afficher touts les collections"+reset);
+            System.out.println("5."+ yellow + bold +" Afficher Un Livre à partir de son Auteur"+reset);
+            System.out.println("6."+ cyan + bold +" Afficher Un Livre à partir de son Titre"+reset);
+            System.out.println("7. "+ yellow + bold +"Afficher Un Livre à partir de son NumeroInventair"+reset);
+            System.out.println("8. "+ cyan + bold +"Afficher Tout Les Livres Disponible"+reset);
+            System.out.println("9."+ yellow + bold +" Afficher Une collection a partir d'Isbn"+reset);
+            System.out.println("10."+ cyan + bold +" Emprunter Un Livre"+reset);
+            System.out.println("11. "+ yellow + bold +"Afficher Les Livres Empruntés et Les Informations d'Emprunteur "+reset);
+            System.out.println("12. "+ cyan + bold +" returner un livre "+reset);
+            System.out.println("13. "+ yellow + bold +"Ajouter Un Nouveau Status"+reset);
+            System.out.println("14. "+ cyan + bold +"Modifier Un Nouveau Status"+reset);
+            System.out.println("15. "+ yellow + bold +"Supprimer Un Nouveau Status"+reset);
+            System.out.println("16. "+ cyan + bold +"Ajouter Un Nouveau emprunteur"+reset);
+            System.out.println("17. "+ yellow + bold +"Modifier Un  emprunteur"+reset);
+            System.out.println("18. "+ cyan + bold +"Supprimer Un  emprunteur"+reset);
+            System.out.println("19. "+ yellow + bold +"Afficher touts les emprunteurs"+reset);
+            System.out.println("20. "+ cyan + bold +"Afficher un emprunteur selon son memberShip"+reset);
+            System.out.println("21. "+ yellow + bold +"Afficher Les Statistiques"+reset);
+            System.out.println("0. "+ green + bold +"Exit"+reset);
 
             System.out.print("Enter your choice: ");
 
@@ -63,11 +67,11 @@ public class MenuController {
                     case 3:livreController.Delete(); break;
                     case 4:collectionController.findAll();break;
                     case 5:
-                        System.out.print("***** L'affichage d'un livre à partir de son autheur*****\n");
+                        System.out.print("***** L'affichage d'un livre à partir de son autheur *****\n");
                         livreController.findByAuthor();
                         break;
                     case 6:
-                        System.out.print("***** L'affichage d'un livre à partir de son titre*****\n");
+                        System.out.print("***** L'affichage d'un livre à partir de son titre *****\n");
                         livreController.findByTitre();
                         break;
                     case 7:
@@ -99,7 +103,7 @@ public class MenuController {
                         statusController.save();
                         break;
                     case 14:
-                        System.out.print("--------- Modifie d'un  Status --------- \n");
+                        System.out.print("--------- Modifie d'un Status --------- \n");
                         statusController.update();
                         break;
                     case 15:
@@ -130,7 +134,7 @@ public class MenuController {
                         System.out.print("-------- L'affichage des statistiques -----------\n");
                         livreController.statistique();
                         break;
-                    case 22:
+                    case 0:
                         exit = true;
                         break;
                     default:

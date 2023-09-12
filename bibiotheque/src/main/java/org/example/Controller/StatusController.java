@@ -1,7 +1,7 @@
 package org.example.Controller;
 
 import org.example.Model.Status;
-import org.example.Service.StatusService;
+import org.example.Service.Impl.StatusService;
 
 import java.sql.SQLException;
 import java.util.List;

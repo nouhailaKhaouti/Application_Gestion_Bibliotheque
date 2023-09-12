@@ -1,11 +1,11 @@
-package org.example.Service;
+package org.example.Service.Impl;
 
 import org.example.Model.Livre;
 import org.example.Model.Collection;
 import org.example.Repository.LivreRepository;
+import org.example.Service.Impl.CollectionService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LivreService {
@@ -26,10 +26,10 @@ public class LivreService {
     public String delete(String numero)throws SQLException{
        Livre livre= livreRepository.findByNI(numero);
        if(livre!=null){
-           if(livreRepository.findByCollection(livre.getCollection().getId()).size()<1){
+           if(livre.getCollection().getTotale()==1){
                boolean res=collectionService.delete(livre.getCollection().getIsbn());
                if(res){
-                   System.out.print("collection with the isbn: "+livre.getCollection().getIsbn()+"has been deleted");
+                   return "collection with the isbn: "+livre.getCollection().getIsbn()+"has been deleted along with the book : "+livre.getNumeroInventair();
                }else{
                    return "error in deleting the collection";
                }
@@ -65,18 +65,18 @@ public class LivreService {
         return null;
     }
 
-    public Livre findByAuthor(String author)throws SQLException{
-        Livre livre=livreRepository.findByAuthor(author);
-        if(livre!=null){
-            return livre;
+    public List<Livre> findByAuthor(String author)throws SQLException{
+        List<Livre> livres=livreRepository.findByAttribute(author,"auteur");
+        if(livres!=null){
+            return livres;
         }
         return null;
     }
 
-    public Livre findByTitre(String title)throws SQLException{
-        Livre livre=livreRepository.findByTitre(title);
-        if(livre!=null){
-            return livre;
+    public List<Livre> findByTitre(String title)throws SQLException{
+        List<Livre> livres=livreRepository.findByAttribute(title,"title");
+        if(livres!=null){
+            return livres;
         }
         return null;
     }

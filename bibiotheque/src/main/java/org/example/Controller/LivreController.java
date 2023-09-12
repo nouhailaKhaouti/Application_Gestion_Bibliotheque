@@ -2,12 +2,10 @@ package org.example.Controller;
 
 import org.example.Model.Collection;
 import org.example.Model.Livre;
-import org.example.Service.CollectionService;
-import org.example.Service.LivreService;
+import org.example.Service.Impl.CollectionService;
+import org.example.Service.Impl.LivreService;
 
-import java.net.SocketOption;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -58,39 +56,49 @@ public class LivreController {
         System.out.print("Stat:"+livre.getStatus().getLabel());
     }
 
-    public void findByAuthor()throws SQLException{
-        Scanner scanner=new Scanner(System.in);
-        System.out.print("Enter the Author of the livre");
-        String author= scanner.next();
-        Livre livre=livreService.findByAuthor(author);
-        if(livre!=null) {
-            System.out.print("***********************\n");
-            System.out.print("Book:\n");
-            System.out.print("Title:" + livre.getCollection().getTitle()+"\n");
-            System.out.print("Auteur:" + livre.getCollection().getAuteur()+"\n");
-            System.out.print("Isbn:" + livre.getCollection().getIsbn()+"\n");
-            System.out.print("Stat:" + livre.getStatus().getLabel()+"\n");
-        }else{
-            System.out.println("the book with Author :"+author+"is null");
-        }
-
-    }
-
     public void findByTitre()throws SQLException{
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter the title of the livre");
         String titre= scanner.next();
-        Livre livre=livreService.findByTitre(titre);
-        if(livre!=null) {
-            System.out.print("***********************\n");
-            System.out.print("Book:\n");
-            System.out.print("Title:" + livre.getCollection().getTitle() + "\n");
-            System.out.print("Auteur:" + livre.getCollection().getAuteur() + "\n");
-            System.out.print("Isbn:" + livre.getCollection().getIsbn() + "\n");
-            System.out.print("Stat:" + livre.getStatus().getLabel() + "\n");
-        }else{
-            System.out.println("\nthis book with title:"+titre+" doesn't exist\n");
+       List<Livre> livres=livreService.findByTitre(titre);
+        System.out.println("************************************************************************************************");
+        System.out.printf("| %-15s | %-20s | %-30s | %-20s | %-20s | %-15s | %-10s |%n",
+                "Book", "Num Inventair", "Title", "Auteur", "Book disponible", "Isbn", "Stat");
+        System.out.println("************************************************************************************************");
+        for (Livre livre : livres) {
+            System.out.printf("| %-15s | %-20s | %-30s | %-20s | %-20d | %-15s | %-10s |%n",
+                    " ",
+                    livre.getNumeroInventair(),
+                    livre.getCollection().getTitle(),
+                    livre.getCollection().getAuteur(),
+                    livre.getCollection().getTotale(),
+                    livre.getCollection().getIsbn(),
+                    livre.getStatus().getLabel());
         }
+
+        System.out.println("************************************************************************************************");
+    }
+    public void findByAuthor()throws SQLException{
+        Scanner scanner=new Scanner(System.in);
+        System.out.print("Enter the author of the livre");
+        String author= scanner.next();
+        List<Livre> livres=livreService.findByAuthor(author);
+        System.out.println("************************************************************************************************");
+        System.out.printf("| %-15s | %-20s | %-30s | %-20s | %-20s | %-15s | %-10s |%n",
+                "Book", "Num Inventair", "Title", "Auteur", "Book disponible", "Isbn", "Stat");
+        System.out.println("************************************************************************************************");
+        for (Livre livre : livres) {
+            System.out.printf("| %-15s | %-20s | %-30s | %-20s | %-20d | %-15s | %-10s |%n",
+                    " ",
+                    livre.getNumeroInventair(),
+                    livre.getCollection().getTitle(),
+                    livre.getCollection().getAuteur(),
+                    livre.getCollection().getTotale(),
+                    livre.getCollection().getIsbn(),
+                    livre.getStatus().getLabel());
+        }
+
+        System.out.println("************************************************************************************************");
     }
 
     public void findAll()throws SQLException{

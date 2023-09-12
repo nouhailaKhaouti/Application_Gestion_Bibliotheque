@@ -119,34 +119,20 @@ public class LivreRepository {
         return null;
     }
 
-    public Livre findByTitre(String title)throws SQLException{
-        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c.title=?";
+    public List<Livre> findByAttribute(String value,String key)throws SQLException{
+        List<Livre> livres=new ArrayList<>();
+        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c."+key+" ILIKE ?";
         try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
-            preparedStatement.setString(1,title);
+            preparedStatement.setString(1,"%"+value+"%");
             ResultSet resultSet=preparedStatement.executeQuery();
-            if(resultSet.next()){
+            while(resultSet.next()){
                 Livre livre=new Livre();
                 livre.setId(resultSet.getLong("id"));
                 livre.mapData(resultSet);
-                return livre;
+                livres.add(livre);
             }
+            return livres;
         }
-        return null;
-    }
-
-    public Livre findByAuthor(String author)throws SQLException{
-        String IdLivreQuery="Select * from Livre l Join collection c on l.collection_id=c.id Join status s on l.status_id=s.id where c.auteur=?";
-        try(PreparedStatement preparedStatement=connection.prepareStatement(IdLivreQuery)){
-            preparedStatement.setString(1,author);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            if(resultSet.next()){
-                Livre livre=new Livre();
-                livre.setId(resultSet.getLong("id"));
-                livre.mapData(resultSet);
-                return livre;
-            }
-        }
-        return null;
     }
 
 

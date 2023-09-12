@@ -93,9 +93,6 @@ public class EmpruntRepository {
                     livres.add(livre.mapData(resultSetL));
                 }
                 emprunt.setLivreList(livres);
-
-
-
                 return emprunt;
             }
         }
@@ -133,12 +130,12 @@ public class EmpruntRepository {
                         Livre livre = new Livre();
                         livre.setId(resultSetL.getLong("livre_id"));
                         livres.add(livre.mapData(resultSetL));
-                        livres.add(livre);
                     }
+                    emprunt.setEmprunteur(emprunteur);
+                    emprunt.setLivreList(livres);
+                    emprunts.add(emprunt.mapData(resultSet));
                 }
-                emprunt.setEmprunteur(emprunteur);
-                emprunt.setLivreList(livres);
-                emprunts.add(emprunt.mapData(resultSet));
+
             }
         }
         return emprunts;
@@ -154,9 +151,9 @@ public class EmpruntRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
+            return null;
         }
-        return 0;
+        return null;
     }
 
     public Emprunt findEmpruntLivre(Livre livre){
@@ -177,7 +174,7 @@ public class EmpruntRepository {
     }
 
     public Integer findByEmprunteur(Emprunt emprunt){
-        String sql="Select count(*) emprunt where emprunteur_id=? And returne=false";
+        String sql="Select count(*) As count FROM emprunt where emprunteur_id=? And returne=false";
         try(PreparedStatement preparedStatement=connection.prepareStatement(sql)){
             preparedStatement.setLong(1,emprunt.getEmprunteur().getId());
             ResultSet resultSet=preparedStatement.executeQuery();

@@ -1,11 +1,9 @@
 package org.example.Controller;
 
-import org.example.Config.DatabaseConnection;
 import org.example.Model.User;
 import org.example.Repository.UserRepository;
-import org.example.Service.UserService;
+import org.example.Service.Impl.UserService;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 public class AuthentificationController {
@@ -23,8 +21,8 @@ public class AuthentificationController {
     String enteredPassword = scanner.nextLine();
         test.setPassword(enteredPassword);
     User user =userService.authenticate(test);
-        if (user!=null) {
-        System.out.print( "Authentication successful. Welcome, " + user.getUsername() + "!");
+    if (user!=null) {
+        System.out.print( "Authentication successful. Welcome, " + user.getUsername() + "!\n");
         return true;
     } else {
             System.out.print(  "Authentication failed. Invalid username or password.");
